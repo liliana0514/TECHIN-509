@@ -10,24 +10,20 @@ def flood_fill(input_board, old, new, x, y):
     Returns:
         List[str]: Modified board
     """
-    # Check if the coordinates are within the board boundaries
-    if x < 0 or x >= len(input_board) or y < 0 or y >= len(input_board[0]):
-        return input_board
+    def fill(x, y):
+        # Check if the coordinates are within bounds and if the cell has the old value
+        if 0 <= x < len(input_board) and 0 <= y < len(input_board[0]) and input_board[x][y] == old:
+            # Replace the old value with the new value
+            input_board[x] = input_board[x][:y] + new + input_board[x][y + 1:]
+            # Recursively fill neighboring cells
+            fill(x + 1, y)
+            fill(x - 1, y)
+            fill(x, y + 1)
+            fill(x, y - 1)
 
-    # Check if the current cell has the old value
-    if input_board[x][y] == old:
-        # Replace the old value with the new value
-        input_board[x] = input_board[x][:y] + new + input_board[x][y + 1:]
-
-        # Recursively fill in neighboring cells
-        flood_fill(input_board, old, new, x + 1, y)
-        flood_fill(input_board, old, new, x - 1, y)
-        flood_fill(input_board, old, new, x, y + 1)
-        flood_fill(input_board, old, new, x, y - 1)
-
+    fill(x, y)
     return input_board
 
-# Test cases
 board = [
     "......................",
     "......##########......",
@@ -39,10 +35,8 @@ board = [
     "....##############....",
 ]
 
-modified_board = flood_fill(input_board=board, old=".", new="~", x=5, y=5)
+
+modified_board = flood_fill(input_board=board, old=".", new="~", x=2, y=21)
 
 for a in modified_board:
     print(a)
-
-print(len(board))
-print(len(board[0]))
